@@ -24,31 +24,14 @@ int main(int argc, char*argv[])
 
   std::cout << "Original vectors:" << std::endl;
   EigenHelpers::OutputVectors(vectors);
-  
-  Eigen::MatrixXf covarianceMatrix = EigenHelpers::ConstructCovarianceMatrix(vectors);
-  std::cout << "covarianceMatrix: " << covarianceMatrix << std::endl;
 
-  typedef Eigen::JacobiSVD<Eigen::MatrixXf> SVDType;
-  SVDType svd(covarianceMatrix, Eigen::ComputeFullU | Eigen::ComputeFullV);
-  std::cout << "U: " << svd.matrixU() << std::endl;
-  std::cout << "V: " << svd.matrixV() << std::endl;
-
-  SVDType::SingularValuesType singularValues = svd.singularValues();
-  for(int i = 0; i < singularValues.size(); ++i)
-  {
-    std::cout << "singular value " << i << " : " << singularValues[i] << std::endl;
-  }
-
-  // Only keep the first N singular vectors of U
-  Eigen::MatrixXf truncatedU = EigenHelpers::TruncateColumns(svd.matrixU(), 1);
-  EigenHelpers::OutputMatrixSize(truncatedU);
-  
   // Project the points onto the new basis. These projected values should simply be the distance from the origin along
   // the best fit line through the original points (which is essentially the line y=x)
+  EigenHelpers::VectorOfVectors projectedVectors = EigenHelpers::DimensionalityReduction(vectors, 1);
   for(unsigned int i = 0; i < vectors.size(); ++i)
   {
-    std::cout << truncatedU.transpose() * vectors[i] << std::endl;
+    std::cout << projectedVectors[i] << std::endl;
   }
-  
+
   return EXIT_SUCCESS;
 }

@@ -15,8 +15,7 @@ class PatchClustering
 public:
 
   template <typename TImage>
-  std::vector<float> VectorizePatch(const TImage* const image, const itk::ImageRegion<2>& region);
-
+  Eigen::VectorXf VectorizePatch(const TImage* const image, const itk::ImageRegion<2>& region);
 
 };
 

@@ -1,15 +1,13 @@
 #include "PatchClustering.h" // appease syntax parser
 
-#include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIterator.h"
 
 template <typename TImage>
-std::vector<float> PatchClustering::VectorizePatch(const TImage* const image, const itk::ImageRegion<2>& region)
+Eigen::VectorXf PatchClustering::VectorizePatch(const TImage* const image, const itk::ImageRegion<2>& region)
 {
-  std::vector<float> vectorized(image->GetNumberOfComponentsPerPixel() * region.GetNumberOfPixels());
+  Eigen::VectorXf vectorized = Eigen::VectorXf::Zero(image->GetNumberOfComponentsPerPixel() * region.GetNumberOfPixels());
   
-  itk::ImageRegionIterator<TImage> imageIterator(image, region);
-
-  unsigned int patchRadius = 5;
+  itk::ImageRegionConstIterator<TImage> imageIterator(image, region);
 
   unsigned int pixelCounter = 0;
   while(!imageIterator.IsAtEnd())

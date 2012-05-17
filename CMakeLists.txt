@@ -15,7 +15,7 @@ INCLUDE(${USE_ITK_FILE})
 
 ADD_EXECUTABLE(ClusterPatches ClusterPatches.cpp
 PatchClustering.cpp)
-TARGET_LINK_LIBRARIES(ClusterPatches ${ITK_LIBRARIES} libITKHelpers)
+TARGET_LINK_LIBRARIES(ClusterPatches ${ITK_LIBRARIES} libITKHelpers libEigenHelpers)
 
 ADD_EXECUTABLE(DimensionalityReductionDemo DimensionalityReductionDemo.cpp
 PatchClustering.cpp)
