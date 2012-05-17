@@ -1,9 +1,6 @@
 // STL
 #include <iostream>
 
-// Custom
-#include "PatchClustering.h"
-
 // Submodules
 #include "EigenHelpers/EigenHelpers.h"
 
@@ -12,11 +9,8 @@
 
 int main(int argc, char*argv[])
 {
-  
   EigenHelpers::VectorOfVectors vectors;
 
-  PatchClustering patchClustering;
-  
   // Create 4 points on a line
   Eigen::Vector2f v;
   v[0] = 1; v[1] = 1;
@@ -25,13 +19,13 @@ int main(int argc, char*argv[])
   vectors.push_back(v);
   v[0] = 5; v[1] = 5;
   vectors.push_back(v);
-  v[0] = 8; v[1] = 7;
+  v[0] = 8; v[1] = 7; // This point is not exactly on the line, to add a bit of noise
   vectors.push_back(v);
 
   std::cout << "Original vectors:" << std::endl;
   EigenHelpers::OutputVectors(vectors);
   
-  Eigen::MatrixXf covarianceMatrix = patchClustering.ConstructCovarianceMatrix(vectors);
+  Eigen::MatrixXf covarianceMatrix = EigenHelpers::ConstructCovarianceMatrix(vectors);
   std::cout << "covarianceMatrix: " << covarianceMatrix << std::endl;
 
   typedef Eigen::JacobiSVD<Eigen::MatrixXf> SVDType;
@@ -49,7 +43,8 @@ int main(int argc, char*argv[])
   Eigen::MatrixXf truncatedU = EigenHelpers::TruncateColumns(svd.matrixU(), 1);
   EigenHelpers::OutputMatrixSize(truncatedU);
   
-  // Project the points onto the new basis
+  // Project the points onto the new basis. These projected values should simply be the distance from the origin along
+  // the best fit line through the original points (which is essentially the line y=x)
   for(unsigned int i = 0; i < vectors.size(); ++i)
   {
     std::cout << truncatedU.transpose() * vectors[i] << std::endl;
