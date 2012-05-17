@@ -1,62 +1,51 @@
-// STL
-#include <iostream>
+#include "PatchClustering.h"
 
-// Eigen
-#include <Eigen/Dense>
 
-// ITK
-#include "itkImage.h"
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
-#include "itkPasteImageFilter.h"
-#include "itkCovariantVector.h"
-
-#include "ITKHelpers/ITKHelpers.h"
-
-typedef itk::Image<itk::CovariantVector<unsigned char, 3>, 2> ImageType;
-typedef itk::Image<float, 2> FloatImageType;
-
-int main(int argc, char*argv[])
+std::vector<float> PatchClustering::ProjectVector(const std::vector<float>& v)
 {
-  std::string inputFileName = argv[1];
+  std::vector<float> projected;
 
-  std::cout << "inputFileName: " << inputFileName << std::endl;
+  return projected;
+}
 
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+Eigen::VectorXf PatchClustering::ComputeMeanVector(const EigenHelpers::VectorOfVectors& vectors)
+{
+  if(vectors.size() == 0)
+  {
+    throw std::runtime_error("Can't compute the mean of a list of vectors of length zero!");
+  }
+  // Compute mean vector
+  Eigen::VectorXf meanVector = Eigen::VectorXf::Zero(vectors[0].size());
+  for(unsigned int i = 0; i < vectors.size(); ++i)
+  {
+    meanVector += vectors[i];
+  }
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(inputFileName);
-  reader->Update();
+  meanVector /= vectors.size();
 
-  itk::ImageRegionIterator<ImageType> imageIterator(reader->GetOutput(),
-                                                      reader->GetOutput()->GetLargestPossibleRegion());
+  return meanVector;
+}
 
-  unsigned int patchRadius = 5;
-  
-  while(!imageIterator.IsAtEnd())
-    {
-    itk::ImageRegion<2> region = ITKHelpers::GetRegionInRadiusAroundPixel(imageIterator.GetIndex(), patchRadius);
+Eigen::MatrixXf PatchClustering::ConstructCovarianceMatrix(const EigenHelpers::VectorOfVectors& vectors)
+{
+  if(vectors.size() == 0)
+  {
+    throw std::runtime_error("Can't compute the covariance matrix of a list of vectors of length zero!");
+  }
 
-    if(region.IsInside(reader->GetOutput()->GetLargestPossibleRegion()))
-      {
+  Eigen::VectorXf meanVector = ComputeMeanVector(vectors);
+  std::cout << "meanVector: " << meanVector << std::endl;
 
-      }
-    ++imageIterator;
-    }
-/*
-  typedef  itk::ImageFileWriter< ImageType  > WriterType;
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(outputFilename);
-  writer->SetInput(output);
-  writer->Update();*/
+  // Construct covariance matrix
+  Eigen::MatrixXf covarianceMatrix = Eigen::MatrixXf::Zero(vectors[0].size(), vectors[0].size());
+  std::cout << "covarianceMatrix size: " << covarianceMatrix.rows() << " x " << covarianceMatrix.cols() << std::endl;
 
-  ///////////// SVD
-  Eigen::MatrixXf A = Eigen::MatrixXf::Random(3, 2);
-  std::cout << "A: " << A << std::endl;
+  for(unsigned int i = 0; i < vectors.size(); ++i)
+  {
+    covarianceMatrix += (vectors[i] - meanVector) * (vectors[i] - meanVector).transpose();
+  }
 
-  Eigen::JacobiSVD<Eigen::MatrixXf> svd(A, Eigen::ComputeFullU | Eigen::ComputeFullV);
-  std::cout << "U: " << svd.matrixU() << std::endl;;
-  std::cout << "V: " << svd.matrixV() << std::endl;;
+  covarianceMatrix /= (vectors.size() - 1);
 
-  return EXIT_SUCCESS;
+  return covarianceMatrix;
 }
