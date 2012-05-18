@@ -13,10 +13,6 @@ if(NOT TARGET ITKHelpers)
   add_subdirectory(ITKHelpers)
 endif()
 
-if(NOT TARGET EigenHelpers)
-  add_subdirectory(EigenHelpers)
-endif()
-
 FIND_PACKAGE(ITK REQUIRED)
 INCLUDE(${USE_ITK_FILE})
 

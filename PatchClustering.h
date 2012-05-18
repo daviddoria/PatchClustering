@@ -8,7 +8,7 @@
 #include <Eigen/Dense>
 
 // Submodules
-#include "EigenHelpers/EigenHelpers.h"
+#include "KMeansClustering/EigenHelpers/EigenHelpers.h"
 
 class PatchClustering
 {

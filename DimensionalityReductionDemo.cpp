@@ -2,7 +2,7 @@
 #include <iostream>
 
 // Submodules
-#include "EigenHelpers/EigenHelpers.h"
+#include "KMeansClustering/EigenHelpers/EigenHelpers.h"
 
 // Eigen
 #include <Eigen/Dense>
