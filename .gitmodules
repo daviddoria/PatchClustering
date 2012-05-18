@@ -4,3 +4,6 @@
 [submodule "EigenHelpers"]
 	path = EigenHelpers
 	url = git@github.com:daviddoria/EigenHelpers.git
+[submodule "KMeansClustering"]
+	path = KMeansClustering
+	url = git@github.com:daviddoria/KMeansClustering.git
