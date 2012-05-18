@@ -72,8 +72,9 @@ int main(int argc, char*argv[])
 
   EigenHelpers::VectorOfVectors projectedVectors = EigenHelpers::DimensionalityReduction(vectors, 10);
 
+  unsigned int numberOfClusters = 3;
   KMeansClustering kmeans;
-  kmeans.SetK(2);
+  kmeans.SetK(numberOfClusters);
   kmeans.SetPoints(projectedVectors);
   kmeans.SetInitMethod(KMeansClustering::KMEANSPP);
   //kmeans.SetRandom(false); // for repeatable results
@@ -82,19 +83,29 @@ int main(int argc, char*argv[])
 
   std::vector<unsigned int> labels = kmeans.GetLabels();
 
-  std::cout << "Resulting cluster ids:" << std::endl;
-  for(unsigned int i = 0; i < labels.size(); ++i)
-  {
-    std::cout << labels[i] << std::endl;
-  }
-  /*
-  typedef  itk::ImageFileWriter< ImageType  > WriterType;
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(outputFilename);
-  writer->SetInput(output);
-  writer->Update();
-  */
+//   std::cout << "Resulting cluster ids:" << std::endl;
+//   for(unsigned int i = 0; i < labels.size(); ++i)
+//   {
+//     std::cout << labels[i] << std::endl;
+//   }
 
+  for(unsigned int clusterId = 0; clusterId < numberOfClusters; ++clusterId)
+    {
+    unsigned int counter = 0;
+    for(unsigned int i = 0; i < labels.size(); ++i)
+      {
+      if(labels[i] == clusterId)
+        {
+        std::stringstream ss;
+        ss << clusterId << "_" << counter << ".png";
+
+        ITKHelpers::WriteRegion(image, regions[i], ss.str());
+
+        counter++;
+        }
+      }
+    }
+  
   return EXIT_SUCCESS;
 }
 
