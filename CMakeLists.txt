@@ -16,10 +16,11 @@ endif()
 FIND_PACKAGE(ITK REQUIRED)
 INCLUDE(${USE_ITK_FILE})
 
-ADD_EXECUTABLE(ClusterPatches ClusterPatches.cpp
-PatchClustering.cpp)
-TARGET_LINK_LIBRARIES(ClusterPatches ${ITK_LIBRARIES} ITKHelpers EigenHelpers KMeansClustering)
+add_library(PatchClustering PatchClustering.cpp)
+target_link_libraries(PatchClustering KMeansClustering ITKHelpers EigenHelpers)
 
-ADD_EXECUTABLE(DimensionalityReductionDemo DimensionalityReductionDemo.cpp
-PatchClustering.cpp)
-TARGET_LINK_LIBRARIES(DimensionalityReductionDemo ${ITK_LIBRARIES} ITKHelpers EigenHelpers)
+ADD_EXECUTABLE(ClusterPatches ClusterPatches.cpp)
+TARGET_LINK_LIBRARIES(ClusterPatches ${ITK_LIBRARIES} PatchClustering)
+
+ADD_EXECUTABLE(DimensionalityReductionDemo DimensionalityReductionDemo.cpp)
+TARGET_LINK_LIBRARIES(DimensionalityReductionDemo ${ITK_LIBRARIES} PatchClustering)
