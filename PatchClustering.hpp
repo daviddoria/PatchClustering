@@ -6,7 +6,7 @@ template <typename TImage>
 Eigen::VectorXf PatchClustering::VectorizePatch(const TImage* const image, const itk::ImageRegion<2>& region)
 {
   Eigen::VectorXf vectorized = Eigen::VectorXf::Zero(image->GetNumberOfComponentsPerPixel() * region.GetNumberOfPixels());
-  
+
   itk::ImageRegionConstIterator<TImage> imageIterator(image, region);
 
   unsigned int pixelCounter = 0;
