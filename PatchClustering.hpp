@@ -9,12 +9,13 @@ Eigen::VectorXf PatchClustering::VectorizePatch(const TImage* const image, const
 
   itk::ImageRegionConstIterator<TImage> imageIterator(image, region);
 
+  unsigned int numberOfComponentsPerPixel = image->GetNumberOfComponentsPerPixel();
   unsigned int pixelCounter = 0;
   while(!imageIterator.IsAtEnd())
     {
-    for(unsigned int component = 0; component < image->GetNumberOfComponentsPerPixel(); ++component)
+    for(unsigned int component = 0; component < numberOfComponentsPerPixel; ++component)
       {
-      vectorized[component * pixelCounter] = imageIterator.Get()[component];
+      vectorized[numberOfComponentsPerPixel * pixelCounter + component] = imageIterator.Get()[component];
       }
     pixelCounter++;
     ++imageIterator;
