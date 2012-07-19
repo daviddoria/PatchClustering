@@ -1,3 +1,6 @@
+#ifndef PatchClustering_hpp
+#define PatchClustering_hpp
+
 #include "PatchClustering.h" // appease syntax parser
 
 #include "ITKHelpers/ITKHelpers.h"
@@ -54,3 +57,5 @@ static void UnvectorizePatch(const Eigen::VectorXf& vectorized, const TImage* co
     ++imageIterator;
     }
 }
+
+#endif
