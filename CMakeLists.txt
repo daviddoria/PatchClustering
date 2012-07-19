@@ -12,12 +12,16 @@ add_subdirectory(KMeansClustering)
 
 if(NOT TARGET ITKHelpers)
   add_subdirectory(ITKHelpers)
+  include_directories(${ITKHelpers_includes})
 endif()
 
 FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase
-ITKImageIntensity ITKImageFeature ITKMathematicalMorphology ITKBinaryMathematicalMorphology
-ITKDeprecated)
+            ITKImageIntensity ITKImageFeature ITKMathematicalMorphology ITKBinaryMathematicalMorphology)
 INCLUDE(${USE_ITK_FILE})
+
+if(NOT ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+  set(PatchClustering_includes ${ITKHelpers_includes} ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+endif()
 
 add_library(PatchClustering PatchClustering.cpp)
 target_link_libraries(PatchClustering KMeansClustering ITKHelpers EigenHelpers)
