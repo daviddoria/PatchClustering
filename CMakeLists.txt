@@ -14,7 +14,9 @@ if(NOT TARGET ITKHelpers)
   add_subdirectory(ITKHelpers)
 endif()
 
-FIND_PACKAGE(ITK REQUIRED)
+FIND_PACKAGE(ITK REQUIRED ITKCommon ITKIOImageBase
+ITKImageIntensity ITKImageFeature ITKMathematicalMorphology ITKBinaryMathematicalMorphology
+ITKDeprecated)
 INCLUDE(${USE_ITK_FILE})
 
 add_library(PatchClustering PatchClustering.cpp)

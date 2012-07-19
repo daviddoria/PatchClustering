@@ -9,7 +9,7 @@
 
 int main(int argc, char*argv[])
 {
-  EigenHelpers::VectorOfVectors vectors;
+  EigenHelpers::VectorOfFloatVectors vectors;
 
   // Create 4 points on a line
   Eigen::Vector2f v;
@@ -27,7 +27,7 @@ int main(int argc, char*argv[])
 
   // Project the points onto the new basis. These projected values should simply be the distance from the origin along
   // the best fit line through the original points (which is essentially the line y=x)
-  EigenHelpers::VectorOfVectors projectedVectors = EigenHelpers::DimensionalityReduction(vectors, 1);
+  EigenHelpers::VectorOfFloatVectors projectedVectors = EigenHelpers::DimensionalityReduction(vectors, 1);
   for(unsigned int i = 0; i < vectors.size(); ++i)
   {
     std::cout << projectedVectors[i] << std::endl;

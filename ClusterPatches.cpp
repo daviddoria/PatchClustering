@@ -51,7 +51,7 @@ int main(int argc, char*argv[])
 
   unsigned int patchRadius = 5;
 
-  EigenHelpers::VectorOfVectors vectors;
+  EigenHelpers::VectorOfFloatVectors vectors;
   std::vector<itk::ImageRegion<2> > regions;
   
   while(!imageIterator.IsAtEnd())
@@ -70,7 +70,7 @@ int main(int argc, char*argv[])
 
   std::cout << "There are " << regions.size() << " regions." << std::endl;
 
-  EigenHelpers::VectorOfVectors projectedVectors = EigenHelpers::DimensionalityReduction(vectors, 10);
+  EigenHelpers::VectorOfFloatVectors projectedVectors = EigenHelpers::DimensionalityReduction(vectors, 10);
 
   unsigned int numberOfClusters = 3;
   KMeansClustering kmeans;
