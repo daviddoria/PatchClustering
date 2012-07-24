@@ -26,8 +26,14 @@ endif()
 add_library(PatchClustering PatchClustering.cpp)
 target_link_libraries(PatchClustering KMeansClustering ITKHelpers EigenHelpers)
 
-ADD_EXECUTABLE(ClusterPatches ClusterPatches.cpp)
-TARGET_LINK_LIBRARIES(ClusterPatches ${ITK_LIBRARIES} PatchClustering)
+SET(PatchClustering_BuildExamples OFF CACHE BOOL "PatchClustering_BuildExamples")
+if(PatchClustering_BuildExamples)
 
-ADD_EXECUTABLE(DimensionalityReductionDemo DimensionalityReductionDemo.cpp)
-TARGET_LINK_LIBRARIES(DimensionalityReductionDemo ${ITK_LIBRARIES} PatchClustering)
+  ADD_EXECUTABLE(ClusterPatches ClusterPatches.cpp)
+  TARGET_LINK_LIBRARIES(ClusterPatches ${ITK_LIBRARIES} PatchClustering)
+
+  ADD_EXECUTABLE(DimensionalityReductionDemo DimensionalityReductionDemo.cpp)
+  TARGET_LINK_LIBRARIES(DimensionalityReductionDemo ${ITK_LIBRARIES} PatchClustering)
+
+endif(PatchClustering_BuildExamples)
+
